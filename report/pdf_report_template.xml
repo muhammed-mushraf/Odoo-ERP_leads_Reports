@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_wizard_lead_certificate">
+        <t t-call="web.html_container">
+            <!--            <t t-call="web.external_layout">-->
+
+            <style>
+                /* Add style for table borders */
+                .table-bordered {
+                border: 1px solid #000; /* Change color and width as needed */
+                border-collapse: collapse;
+                width: 100%;
+                margin-bottom: 10px; /* Add gap between tables */
+                }
+
+                .table-bordered th, .table-bordered td {
+                border: 1px solid #000; /* Change color and width as needed */
+                padding: 8px;
+                text-align: left;
+                }
+
+                /* Add style for spacing between tables */
+                .table-gap {
+                margin-bottom: 10px; /* Adjust the gap as needed */
+                }
+
+                /* Add style to prevent page breaks inside table rows */
+                .table-bordered tr {
+                page-break-inside: avoid;
+                }
+
+                /* Add style for 'Won' stage background color */
+                .won-stage {
+                color: green; /* Text color, change as needed */
+                }
+
+                /* Add style for 'Lost' stage background color */
+                .lost-stage {
+                color: red; /* Text color, change as needed */
+                }
+            </style>
+            <div class="page">
+
+                <h1 style="text-align: center; font-weight: bold;">Lead Reports</h1>
+                <p>From Date:
+                    <t t-esc="from_date"/>
+                </p>
+                <p>To Date:
+                    <t t-esc="to_date"/>
+                </p>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr style="background-color: #FEFBEA;">
+                            <th>Sales Person</th>
+                            <th>Lead Name</th>
+                            <th>Expected Revenue</th>
+                            <th>Customer</th>
+                            <th>Priority</th>
+                            <th>Tags</th>
+                            <th>Status</th>
+                            <th>Lost Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <t t-foreach="leads_data" t-as="lead">
+                            <tr t-attf-class="{{ 'won-stage' if lead['status'] == 'Won' else '' }} {{ 'lost-stage' if lead['status'] == 'Lost' else '' }}">
+                                <td>
+                                    <t t-esc="lead['salesperson']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="lead['lead_name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="lead['expected_revenue']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="lead['customer']"/>
+                                </td>
+
+                                <td>
+                                    <t t-if="lead['priority'] == '0'">
+                                        <t t-set="priority_text" t-value="'Not Set'"/>
+                                    </t>
+                                    <t t-elif="lead['priority'] == '1'">
+                                        <t t-set="priority_text" t-value="'Low'"/>
+                                    </t>
+                                    <t t-elif="lead['priority'] == '2'">
+                                        <t t-set="priority_text" t-value="'Medium'"/>
+                                    </t>
+                                    <t t-elif="lead['priority'] == '4'">
+                                        <t t-set="priority_text" t-value="'High'"/>
+                                    </t>
+
+                                    <t t-esc="priority_text"/>
+                                </td>
+                                <td>
+                                    <ul>
+                                        <t t-foreach="lead['tags']" t-as="tag">
+                                            <li>
+                                                <t t-esc="tag"/>
+                                            </li>
+                                        </t>
+                                    </ul>
+                                </td>
+                                <td>
+
+                                    <t t-esc="lead['status']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="lead['lost_reason']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="color: green;">Total Won Leads</th>
+                            <th style="color: red;">Total Lost Leads</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="font-weight: bold;">
+                            <td>
+                                <t t-esc="won_leads_count"/>
+                            </td>
+                            <td>
+                                <t t-esc="lost_leads_count"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Sales Person</th>
+                            <th>Total Leads</th>
+                            <th style="color: green;">Won Leads</th>
+                            <th style="color: red;">Lost Leads</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="salespersons" t-as="salesperson">
+                            <tr>
+                                <td>
+                                    <t t-esc="salesperson"/>
+                                </td>
+                                <td>
+                                    <t t-esc="salespersons[salesperson]['total_leads']"/>
+                                </td>
+                                <td style="color: green;">
+                                    <t t-esc="salespersons[salesperson]['won_leads']"/>
+                                </td>
+                                <td style="color: red;">
+                                    <t t-esc="salespersons[salesperson]['lost_leads']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <h3 style="text-align: center; font-weight: bold;">Lead From Past 3 Months</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Sales Person</th>
+                            <th style="color: green;">Won Leads</th>
+                            <th style="color: red;">Lost Leads</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="salespersons" t-as="salesperson">
+                            <tr>
+                                <td>
+                                    <t t-esc="salesperson"/>
+                                </td>
+                                <td style="color: green;">
+                                    <t t-if="salesperson in won_leads_past_90_days">
+                                        <t t-esc="won_leads_past_90_days[salesperson]"/>
+                                    </t>
+                                    <t t-else="">
+                                        0
+                                    </t>
+                                </td>
+                                <td style="color: red;">
+                                    <t t-if="salesperson in lost_leads_past_90_days">
+                                        <t t-esc="lost_leads_past_90_days[salesperson]"/>
+                                    </t>
+                                    <t t-else="">
+                                        0
+                                    </t>
+                                </td>
+
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <div class="table-gap"></div>
+
+            </div>
+            <!--            </t>-->
+        </t>
+    </template>
+</odoo>

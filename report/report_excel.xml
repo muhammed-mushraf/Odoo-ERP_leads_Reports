@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="wizard_lead_report_xlsx" model="ir.actions.report">
+        <field name="name">Wizard Lead Excel</field>
+        <field name="model">wizard.crmlead</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">dgz_crm_leads_reports.report_wizard_xls</field>  <!-- Update this line -->
+        <field name="report_file">dgz_crm_leads_reports.report_wizard_xls</field>
+        <field name="binding_model_id" ref="model_wizard_crmlead"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

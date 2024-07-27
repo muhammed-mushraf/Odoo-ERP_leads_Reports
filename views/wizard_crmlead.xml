@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="wizard_lead_form" model="ir.ui.view">
+        <field name="name">wizard.crm.lead.form</field>
+        <field name="model">wizard.crmlead</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="from_date" required="1"/>
+                        </group>
+                        <group>
+                            <field name="to_date" required="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="excel_report" string="Excel" type="object" class="btn-primary"/>
+                        <button name="pdf_report" string="Pdf" type="object" class="btn-primary"/>
+                        <button name="cancel_report" string="Cancel" type="object" class="btn-primary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="wizard_lead_action" model="ir.actions.act_window">
+        <field name="name">wizard crm lead</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.crmlead</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="wizard_crmlead_menu" name="Leads Report" parent="crm.crm_menu_report" action="wizard_lead_action"/>
+</odoo>

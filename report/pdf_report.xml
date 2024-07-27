@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <report
+            id="wizard_lead_report"
+            string="Wizard Lead Report"
+            model="crm.lead"
+            report_type="qweb-pdf"
+            name="dgz_crm_leads_reports.report_wizard_lead_certificate"
+            file="dgz_crm_leads_reports.report_wizard_lead_certificate"/>
+</odoo>
