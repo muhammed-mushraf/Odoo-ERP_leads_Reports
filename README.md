@@ -1,1 +1,1 @@
-Demo Video: https://mushraf-m.github.io/lead_report_video/
+video : https://mushraf-m.github.io/lead_report_video/
